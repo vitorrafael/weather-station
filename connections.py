@@ -2,9 +2,7 @@
     and the ThingSpeak. """
 
 import os
-from socket import gaierror
-import urllib.request
-from urllib.error import URLError
+import requests
 import serial
 
 
@@ -16,7 +14,7 @@ URL = "https://api.thingspeak.com/update?api_key={}&field1={}&field2={}&field3={
 def test_internet_connection():
     """ Tests the internet connection. """
     try:
-        urllib.request.urlopen("https://www.google.com/", timeout=10)
+        requests.get("https://www.google.com/", timeout=10)
     except:
         raise InternetConnectionError
 
@@ -24,10 +22,8 @@ def test_internet_connection():
 def send_data_to_server(temperature, humidity, light_incidence):
     """ Sends the data to the ThingSpeak server. """
     try:
-        urllib.request.urlopen(URL.format(API_KEY, temperature,
-                                          humidity, light_incidence))
-    except (URLError, gaierror) as e:
-        print(str(e))
+        requests.get(URL.format(API_KEY, temperature, humidity, light_incidence))
+    except:
         raise InternetConnectionError
 
 
